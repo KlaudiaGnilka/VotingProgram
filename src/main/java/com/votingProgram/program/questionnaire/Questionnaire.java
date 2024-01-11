@@ -1,23 +1,28 @@
 package com.votingProgram.program.questionnaire;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
-public class Questionnaire {
-    private final int questionnaireId;
-    private final List<Question> questions = new ArrayList<>();
 
-    public Questionnaire(List<List<String>> questionsAndOptions, int questionnaireId) {
-        for(int i = 1; i <= questionsAndOptions.size(); i++){
-            List<String> workerList = questionsAndOptions.get(i-1);
-            questions.add(new Question(workerList.getFirst(), workerList.subList(1, workerList.size()), i, questionnaireId));
-        }
-        this.questionnaireId = questionnaireId;
+@Document(collection = "Questionnaire")
+public class Questionnaire {
+
+    @NotBlank(message = "QuestionnaireId must be defined")
+    @Id
+    private String questionnaireId;
+
+
+    @NotBlank(message = "Questions must be defined")
+    private List<Question> questions = new ArrayList<>();
+
+
+    public Questionnaire() {
     }
 
     public List<Question> showQuestionnaire(){
@@ -26,5 +31,21 @@ public class Questionnaire {
 
     public Question getQuestion(int numberOfQuestion) {
         return questions.get(numberOfQuestion-1);
+    }
+
+    public String getQuestionnaireId() {
+        return questionnaireId;
+    }
+
+    public void setQuestionnaireId(String questionnaireId) {
+        this.questionnaireId = questionnaireId;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 }

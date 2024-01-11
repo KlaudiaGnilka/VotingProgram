@@ -1,9 +1,8 @@
 package com.votingProgram.program.questionnaire;
 
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
 
-public interface QuestionnaireRepository extends CrudRepository<Questionnaire, Integer> {
-    boolean existByQuestionnaireId(int questionnaireId);
-
-    boolean existByQuestion(int question);
+public interface QuestionnaireRepository extends MongoRepository<Questionnaire, String> {
+//    Question getQuestion(String questionnaireId, int numberOfQuestion);
 }

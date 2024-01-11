@@ -1,29 +1,45 @@
 package com.votingProgram.program.user;
 
-import com.votingProgram.program.user.account.Account;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "Users")
 public class User {
 
+    @NotBlank(message = "Id must be defined")
+    @Id
+    private String login;
+
+    @NotBlank(message = "Password must be defined")
+    private String password;
+
     @NotBlank(message = "Name must be defined")
-    private final String name;
+    private String name;
 
     @NotBlank(message = "Lastname must be defined")
-    private final String lastName;
+    private String lastName;
 
     @NotBlank(message = "Age must be defined")
     private String age;
 
     @NotBlank(message = "Gender must be defined")
-    private final String gender;
-    private Account account;
+    private String gender;
 
-    public User(String name, String lastName, String age, String gender, Account account) {
+    public User() {
+
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setLastName(String lastName) {
         this.lastName = lastName;
-        this.age = age;
+    }
+
+    public void setGender(String gender) {
         this.gender = gender;
-        this.account = account;
     }
 
     public String getName() {
@@ -41,15 +57,23 @@ public class User {
     public void setAge(String age) {
         this.age = age;
     }
-
     public String getGender() {
         return gender;
     }
 
-    public Account getAccount() {
-        return account;
+    public String getLogin() {
+        return login;
     }
-    public void setAccount(Account account) {
-        this.account = account;
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

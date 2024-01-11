@@ -3,16 +3,13 @@ package com.votingProgram.program.questionnaire;
 import java.util.*;
 
 public class Question {
-    private final String question;
-    private final List<String> options;
-    private final int numberOfQuestion;
-    private final int questionnaireId;
 
-    public Question(String question, List<String> options, int numberOfQuestion, int questionnaireId) {
-        this.question = question;
-        this.options = options;
-        this.numberOfQuestion = numberOfQuestion;
-        this.questionnaireId = questionnaireId;
+    private int numberOfQuestion;
+    private String question;
+    private List<String> options;
+
+
+    public Question() {
     }
 
     public String getQuestion() {
@@ -27,9 +24,19 @@ public class Question {
         return numberOfQuestion;
     }
 
-    public int getQuestionId() {
-        return questionnaireId;
+
+    public void setQuestion(String question) {
+        this.question = question;
     }
+
+    public void setOptions(List<String> options) {
+        this.options = options;
+    }
+
+    public void setNumberOfQuestion(int numberOfQuestion) {
+        this.numberOfQuestion = numberOfQuestion;
+    }
+
 
     @Override
     public String toString() {

@@ -1,10 +1,10 @@
 package com.votingProgram.program.user;
 
-import org.springframework.data.repository.CrudRepository;
-
-import java.util.Optional;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 
-public interface UserRepository extends CrudRepository<User, String> {
-    void delete(String login);
+
+
+public interface UserRepository extends MongoRepository<User, String> {
+
 }

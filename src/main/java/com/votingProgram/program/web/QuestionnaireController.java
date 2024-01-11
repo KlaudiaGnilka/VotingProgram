@@ -1,37 +1,62 @@
 package com.votingProgram.program.web;
 
 
-import com.votingProgram.program.questionnaire.Question;
-import com.votingProgram.program.questionnaire.Questionnaire;
-import com.votingProgram.program.questionnaire.QuestionnaireService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.votingProgram.program.questionnaire.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("questionnaire")
 public class QuestionnaireController {
-    private final QuestionnaireService questionnaireService;
 
 
-    public QuestionnaireController(QuestionnaireService questionnaireService) {
-        this.questionnaireService = questionnaireService;
+    @Autowired
+    private QuestionnaireRepository questionnaireRepository;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addQuestionnaire(@RequestBody Questionnaire questionnaire){
+        questionnaireRepository.save(questionnaire);
     }
 
     @GetMapping
     public Iterable<Questionnaire> getAll() {
-        return questionnaireService.viewAllQuestionnaire();
+        return questionnaireRepository.findAll();
     }
 
     @GetMapping("{questionnaireId}")
-    public Questionnaire getQuestionnaire(@PathVariable int questionnaireId) {
-        return questionnaireService.viewQuestionnaireById(questionnaireId);
+    public Questionnaire getQuestionnaire(@PathVariable String questionnaireId) {
+        Optional<Questionnaire> questionnaire = questionnaireRepository.findById(questionnaireId);
+        if(questionnaire.isEmpty()){
+            throw new QuestionnaireNotFoundException(questionnaireId);
+        } else {
+            return questionnaire.get();
+        }
     }
 
+
     @GetMapping("{questionnaireId}/question/{numberOfQuestion}")
-    public Question getQuestion(@PathVariable int questionnaireId, @PathVariable int numberOfQuestion) {
-        return questionnaireService.viewQuestion(questionnaireId, numberOfQuestion);
+    public Question getQuestion(@PathVariable String questionnaireId, @PathVariable int numberOfQuestion) {
+        Optional<Questionnaire> questionnaire = questionnaireRepository.findById(questionnaireId);
+        if(questionnaire.isEmpty()){
+            throw new QuestionnaireNotFoundException(questionnaireId);
+        }else {
+            return questionnaire.get().getQuestion(numberOfQuestion);
+        }
+    }
+
+
+    @DeleteMapping("delete/{questionnaireId}")
+    public void deleteQuestionnaire(@PathVariable String questionnaireId){
+        Optional<Questionnaire> questionnaire = questionnaireRepository.findById(questionnaireId);
+        if(questionnaire.isEmpty()){
+            throw new QuestionnaireNotFoundException(questionnaireId);
+        } else {
+            questionnaireRepository.deleteById(questionnaireId);
+        }
     }
 
 

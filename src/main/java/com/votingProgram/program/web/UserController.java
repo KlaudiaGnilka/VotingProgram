@@ -1,39 +1,51 @@
 package com.votingProgram.program.web;
 
 import com.votingProgram.program.user.User;
-import com.votingProgram.program.user.UserService;
+import com.votingProgram.program.user.UserRepository;
+import com.votingProgram.program.user.AccountNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
-    private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public Iterable<User> getAll() {
-        return userService.viewUsersList();
+        return userRepository.findAll();
     }
 
     @GetMapping("{login}")
     public User getUser(@PathVariable String login) {
-        return userService.viewUserDetails(login);
+        Optional<User> user = userRepository.findById(login);
+        if(user.isEmpty()){
+            throw new AccountNotFoundException(login);
+        } else {
+            return user.get();
+        }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void addUser(@RequestBody User user) {
-        userService.addUserToRepository(user);
+        userRepository.save(user);
     }
 
-    @DeleteMapping("delete/{login}")
+    @DeleteMapping("/delete/{login}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable String login) {
-        userService.removeUserFromRepository(login);
+        Optional<User> user = userRepository.findById(login);
+        if(user.isEmpty()){
+            throw new AccountNotFoundException(login);
+        } else {
+            userRepository.delete(user.get());
+        }
     }
 
 }

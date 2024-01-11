@@ -1,4 +1,4 @@
-package com.votingProgram.program.user.account;
+package com.votingProgram.program.user;
 
 public class AccountAlreadyExistsException extends RuntimeException{
     public AccountAlreadyExistsException(String login){
